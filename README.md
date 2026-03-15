@@ -10,12 +10,16 @@ This design follows the correct Drosera execution model and avoids non-determini
 
 OBIE detects large capital inflows ("whale activity") and records alerts on-chain.
 
+### USD Value Units
+
+All USD values in WhaleStore and WhaleTrap are represented in 1e8 units (e.g., $100,000 = 100_000_000). The minimum threshold for triggering an alert is set by MIN_USD = 100_000_000.
+
 The system is composed of:
 
-* WhaleStore — on-chain alert buffer
-* WhaleTrap — Drosera trap that reads on-chain state
-* AlertVault — responder contract that stores alerts permanently
-* Off-chain detector — computes whale behavior and writes alerts to chain
+- WhaleStore — on-chain alert buffer
+- WhaleTrap — Drosera trap that reads on-chain state
+- AlertVault — responder contract that stores alerts permanently
+- Off-chain detector — computes whale behavior and writes alerts to chain
 
 All data consumed by Drosera is fully deterministic.
 
@@ -73,10 +77,10 @@ Implements the Drosera `ITrap` interface.
 
 Responsibilities:
 
-* Reads WhaleStore in `collect()`
-* Encodes snapshot deterministically
-* Decodes snapshot in `shouldRespond()`
-* Returns payload aligned with responder ABI
+- Reads WhaleStore in `collect()`
+- Encodes snapshot deterministically
+- Decodes snapshot in `shouldRespond()`
+- Returns payload aligned with responder ABI
 
 Payload format:
 
@@ -196,9 +200,9 @@ whitelist = [
 
 Important notes:
 
-* `whitelist` must contain operator EOAs
-* Do not put SAFE or monitored addresses here
-* ABI must match exactly
+- `whitelist` must contain operator EOAs
+- Do not put SAFE or monitored addresses here
+- ABI must match exactly
 
 ---
 
@@ -210,9 +214,9 @@ drosera apply
 
 Drosera will now begin executing:
 
-* collect()
-* shouldRespond()
-* alert(...)
+- collect()
+- shouldRespond()
+- alert(...)
 
 ---
 
@@ -220,10 +224,10 @@ Drosera will now begin executing:
 
 The off-chain service performs:
 
-* block monitoring
-* USD valuation
-* rolling time window tracking
-* surge classification
+- block monitoring
+- USD valuation
+- rolling time window tracking
+- surge classification
 
 When a surge is detected:
 
@@ -244,15 +248,15 @@ Drosera later consumes this data deterministically.
 
 Drosera does not support:
 
-* injected parameters
-* custom operator data
-* runtime values passed to traps
+- injected parameters
+- custom operator data
+- runtime values passed to traps
 
 All trap inputs must originate from:
 
-* on-chain state
-* logs
-* deterministic reads
+- on-chain state
+- logs
+- deterministic reads
 
 WhaleStore converts off-chain intelligence into on-chain truth.
 
@@ -260,21 +264,21 @@ WhaleStore converts off-chain intelligence into on-chain truth.
 
 ## Security Properties
 
-* Deterministic execution
-* Planner-safe
-* ABI-aligned
-* Replay-resistant via alertId
-* No off-chain injection
-* No reverts on empty samples
+- Deterministic execution
+- Planner-safe
+- ABI-aligned
+- Replay-resistant via alertId
+- No off-chain injection
+- No reverts on empty samples
 
 ---
 
 ## Limitations
 
-* Only latest alert stored
-* Off-chain detector required
-* USD pricing assumed off-chain
-* Single-alert buffer
+- Only latest alert stored
+- Off-chain detector required
+- USD pricing assumed off-chain
+- Single-alert buffer
 
 These are acceptable constraints for a PoC.
 
@@ -282,13 +286,13 @@ These are acceptable constraints for a PoC.
 
 ## Future Improvements
 
-* Ring-buffer alert queue
-* Velocity surge logic
-* Group correlation detection
-* DAO-owned WhaleStore
-* Merkle-root batched alerts
-* Cross-chain monitoring
-* Automated escalation responders
+- Ring-buffer alert queue
+- Velocity surge logic
+- Group correlation detection
+- DAO-owned WhaleStore
+- Merkle-root batched alerts
+- Cross-chain monitoring
+- Automated escalation responders
 
 ---
 
@@ -296,11 +300,11 @@ These are acceptable constraints for a PoC.
 
 This project demonstrates:
 
-* Correct Drosera trap design
-* Deterministic on-chain data sourcing
-* Real-world surveillance use case
-* Safe responder ABI alignment
-* Production-grade architecture pattern
+- Correct Drosera trap design
+- Deterministic on-chain data sourcing
+- Real-world surveillance use case
+- Safe responder ABI alignment
+- Production-grade architecture pattern
 
 OBIE models how serious monitoring systems should be built on Drosera.
 

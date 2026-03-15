@@ -23,5 +23,5 @@ interface ITrap {
      */
     function shouldRespond(
         bytes[] calldata data
-    ) external view returns (bool shouldRespond, bytes memory callData);
+    ) external pure returns (bool shouldRespond, bytes memory callData);
 }
