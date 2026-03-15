@@ -35,9 +35,9 @@ async function sendOnChainAlert(walletAddress, usdValue, surgeType = 1) {
       ethers.toUtf8Bytes(`${checksummedAddress}|${Date.now()}|${surgeType}`)
     );
 
-    // Convert USD value to BigInt with 18 decimals precision
-    // Example: 100000 USD -> 100000000000000000000000 (100000 * 10^18)
-    const usdValueBigInt = ethers.parseUnits(usdValue.toFixed(2), 18);
+    // Convert USD value to BigInt with 1e8 precision (matching contract MIN_USD units)
+    // Example: $100,000 USD -> 10_000_000_000_000 (100000 * 10^8)
+    const usdValueBigInt = BigInt(Math.round(usdValue * 1e8));
 
     console.log("");
     console.log("📤 Sending alert to AlertVault contract...");
